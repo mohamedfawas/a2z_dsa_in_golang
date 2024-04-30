@@ -1,30 +1,21 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
-func fizzBuzz(n int) []string {
-	array := make([]string, n)
-	for i := 1; i <= n; i++ {
-		if i%3 == 0 && i%5 == 0 {
-			array[i-1] = "FizzBuzz"
-		} else if i%3 == 0 {
-			array[i-1] = "Fizz"
-		} else if i%5 == 0 {
-			array[i-1] = "Buzz"
+func fib(num int) []int {
+	arr := make([]int, num)
+	for i := 0; i < num; i++ {
+		if i <= 1 {
+			arr[i] = i
 		} else {
-			array[i-1] = strconv.Itoa(i)
+			arr[i] = arr[i-1] + arr[i-2]
 		}
 	}
-	return array
+	return arr
 }
 
 func main() {
-	// i := 2
-	// ex1 := strconv.Itoa(i)
-	// fmt.Println(ex1)
-	arr := fizzBuzz(15)
-	fmt.Println(arr)
+
+	fmt.Println(fib(5))
+
 }
