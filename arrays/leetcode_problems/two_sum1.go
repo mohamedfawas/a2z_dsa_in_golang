@@ -1,4 +1,4 @@
-package lecture1
+package leetcodeproblems
 
 func twoSum(nums []int, target int) []int {
 	numRecord := make(map[int]int)
