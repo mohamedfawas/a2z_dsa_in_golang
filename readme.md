@@ -1,2 +1,3 @@
-In this repo, I will add my codes in golang which I created while following the dsa course by striver. The 
-original course content is provided in c++/java, Here I am adding the solutions in golang.
+# Code workouts in Golang
+- This repo contains Code exercises I have covered while learning DSA in golang
+- Some of the problems are taken from striver's video lecture 
