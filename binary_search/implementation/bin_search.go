@@ -1,17 +1,16 @@
 package binsearchimplementation
 
-func BinarySearch(arr []int, target int) int {
+func BinarySearch(nums []int, target int) int {
 	low := 0
-	high := len(arr) - 1
-	for high >= low {
-		mid := high + (high-low)/2
-		if arr[mid] == target {
+	high := len(nums) - 1
+	for low <= high {
+		mid := low + (high-low)/2
+		if nums[mid] == target {
 			return mid
-		}
-		if arr[mid] < target {
-			high = mid - 1
-		} else {
+		} else if nums[mid] < target {
 			low = mid + 1
+		} else {
+			high = mid - 1
 		}
 	}
 
