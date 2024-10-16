@@ -70,3 +70,34 @@ func (ll *LinkedList) DeleteAtPosition(position int) error {
 	ll.size--
 	return nil
 }
+
+func (ll *LinkedList) DeleteTheNodeWithTheValue(value int) error {
+	/*
+		check if list is empty
+		- if the head node have the value
+		- traverse the linkedlist until the first occurence of the given value
+	*/
+	if ll.head == nil {
+		return fmt.Errorf("list is empty")
+	}
+
+	if ll.head.data == value {
+		ll.head = ll.head.next
+		ll.size--
+		return nil
+	}
+
+	// Traverse the list to find the node with the given value
+	current := ll.head
+	for current.next != nil && current.next.data != value {
+		current = current.next
+	}
+	if current == nil {
+		return fmt.Errorf("node with the given value not found in the linked list")
+	}
+
+	// Adjust the link to remove the node
+	current.next = current.next.next
+	ll.size--
+	return nil
+}
