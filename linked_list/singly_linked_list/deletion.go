@@ -48,3 +48,25 @@ func (ll *LinkedList) DeleteFromEnd() error {
 	ll.size--
 	return nil
 }
+
+// Delete at a Specific Position
+// head -> 1 -> 2 -> 3 -> 4 -> 5 -> nil
+func (ll *LinkedList) DeleteAtPosition(position int) error {
+	if position < 0 || position >= ll.size {
+		return fmt.Errorf("position out of bounds")
+	}
+
+	if position == 0 {
+		ll.head = ll.head.next
+	} else {
+		current := ll.head
+		for i := 0; i < position-1; i++ {
+			current = current.next
+		}
+
+		current.next = current.next.next
+	}
+
+	ll.size--
+	return nil
+}
