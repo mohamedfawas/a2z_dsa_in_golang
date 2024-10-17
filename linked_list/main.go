@@ -27,4 +27,7 @@ func main() {
 	fmt.Println("Deleting the node with the given value")
 	ll.DeleteTheNodeWithTheValue(20)
 	fmt.Println(ll.Traverse())
+
+	// reverse the linkedlist
+
 }
