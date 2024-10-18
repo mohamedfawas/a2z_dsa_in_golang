@@ -9,3 +9,13 @@ func reverseString(s []byte) []byte {
 	}
 	return s
 }
+
+/*
+func main() {
+	str := "hello fawas"
+	// Convert string to []byte
+	reversedStr := reverseString([]byte(str))
+	// Convert []byte back to string for printing
+	fmt.Println(string(reversedStr))
+}
+*/
