@@ -17,7 +17,7 @@ type ListNode struct {
 }
 
 func AddTwoNumbersInLL(t1, t2 *ListNode) *ListNode {
-	dummyNode := &ListNode{Val: 0}
+	dummyNode := &ListNode{Val: -1}
 	current := dummyNode
 	carry := 0
 
