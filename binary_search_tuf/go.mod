@@ -1,0 +1,3 @@
+module binsearchtuf
+
+go 1.22.1
