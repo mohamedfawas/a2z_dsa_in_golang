@@ -5,6 +5,9 @@ import (
 	"strings"
 )
 
+/*
+Map to store sorted version of the word as key, value is the list of anagrams
+*/
 func groupAnagrams(strs []string) [][]string {
 	// Create a map where the key is sorted version of the word
 	// And the value is a list of words that are anagrams
