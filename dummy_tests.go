@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 // func reverseWords(s string) string {
 // 	if len(s) <= 1 {
 // 		return s
@@ -13,6 +9,5 @@ import (
 // }
 
 func main() {
-	word := "hello fawas"
-	fmt.Println(reverseWords(word))
+
 }
