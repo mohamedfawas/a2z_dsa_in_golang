@@ -36,7 +36,7 @@ func AddTwoNumbersInLL(t1, t2 *ListNode) *ListNode {
 		}
 
 		// calculate sum and carry
-		sum := val1 + val2
+		sum := val1 + val2 + carry
 		carry = sum / 10
 		digit := sum % 10
 

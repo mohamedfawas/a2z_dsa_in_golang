@@ -5,23 +5,31 @@ type ListNode struct {
 	Next  *ListNode
 }
 
-func RemoveNthNode(head *ListNode, n int) *ListNode {
-	fast := head
-	for i := 0; i < n; i++ {
-		fast = fast.Next
+func FindLongestIncreasingSubArray(arr []int) []int {
+	n := len(arr)
+	if n <= 1 {
+		return arr
 	}
 
-	if fast == nil {
-		return head.Next
+	currentStart := 0
+	currentLength := 1
+
+	maxStart := 0
+	maxLength := 1
+
+	for i := 1; i < n; i++ {
+		if arr[i] > arr[i-1] {
+			currentLength++
+
+			if currentLength > maxLength {
+				maxLength = currentLength
+				maxStart = currentStart
+			}
+		} else {
+			currentStart = i
+			currentLength = 1
+		}
 	}
 
-	slow := head
-	for fast.Next != nil {
-		fast = fast.Next
-		slow = slow.Next
-	}
-
-	slow.Next = slow.Next.Next
-
-	return head
+	return arr[maxStart : maxStart+maxLength]
 }

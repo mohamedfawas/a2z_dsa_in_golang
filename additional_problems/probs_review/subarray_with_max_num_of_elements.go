@@ -1,5 +1,18 @@
 package probsreview
 
+/*
+check if array is empty or has one element only
+define variables to keep track of the sequence
+Iterate from second element
+	if arr[i]>arr[i-1],
+		currLen++
+			currLen>maxLen
+				replace max values
+	else
+		replace current values
+
+return sub array with max index values
+*/
 func FindLongestIncreasingSubArray(arr []int) []int {
 	// If array is empty or has only one element, return it as is
 	if len(arr) <= 1 {
