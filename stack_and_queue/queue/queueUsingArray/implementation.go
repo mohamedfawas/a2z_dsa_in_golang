@@ -31,6 +31,32 @@ func (q *Queue) Enqueue(item int) error {
 }
 
 // Dequeue removes an element from the front of the queue.
-func Dequeue() {
+func (q *Queue) Dequeue() (int, error) {
+	// check if the queue is empty
+	if len(q.items) == 0 {
+		return 0, errors.New("queue is empty")
+	}
 
+	// Retrieve and remove the first item
+	item := q.items[0]
+	q.items = q.items[1:]
+	fmt.Println("dequeued :", item)
+	return item, nil
+}
+
+func (q *Queue) IsEmpty() bool {
+	return len(q.items) == 0
+}
+
+func (q *Queue) IsFull() bool {
+	return len(q.items) == q.size
+}
+
+func (q *Queue) Display() {
+	if q.IsEmpty() {
+		fmt.Println("Queue is empty")
+		return
+	}
+
+	fmt.Println("queue : ", q.items)
 }
