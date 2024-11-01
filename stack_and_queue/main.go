@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	queueusingarray "stackandqueue/queue/queueUsingArray"
 	stackusingarray "stackandqueue/stack/stackUsingArray"
 )
 
@@ -34,4 +35,37 @@ func main() {
 
 	// Print final stack state
 	stack.PrintStack()
+
+	fmt.Println("========================queue implementaion is shown below =============")
+
+	// Initialize a queue with a maximum size of 5
+	queue := queueusingarray.NewQueue(5)
+
+	// Enqueue items to the queue
+	queue.Enqueue(10)
+	queue.Enqueue(20)
+	queue.Enqueue(30)
+	queue.Enqueue(40)
+	queue.Enqueue(50)
+
+	// Display queue contents
+	queue.Display()
+
+	// Dequeue items from the queue
+	queue.Dequeue()
+	queue.Dequeue()
+
+	// Display queue contents again
+	queue.Display()
+
+	// Try to enqueue one more item to a full queue
+	err := queue.Enqueue(60)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	queue.Display()
+
+	fmt.Println("========================stack implementaion using linked list is shown below =============")
+
 }
