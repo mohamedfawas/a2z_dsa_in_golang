@@ -4,6 +4,7 @@ import (
 	"fmt"
 	queueusingarray "stackandqueue/queue/queueUsingArray"
 	stackusingarray "stackandqueue/stack/stackUsingArray"
+	stackusinglinkedlist "stackandqueue/stack/stackUsingLinkedList"
 )
 
 func main() {
@@ -67,5 +68,24 @@ func main() {
 	queue.Display()
 
 	fmt.Println("========================stack implementaion using linked list is shown below =============")
+	// Create a new stack
+	stackll := stackusinglinkedlist.NewStack()
 
+	// Example usage of stack operations
+	fmt.Println("Pushing elements: 10, 20, 30")
+	stackll.Push(10)
+	stackll.Push(20)
+	stackll.Push(30)
+
+	// Print the stack
+	stackll.PrintStack()
+
+	// Peek at top element
+	fmt.Printf("Top element: %d\n", stackll.Peek())
+
+	// Pop an element
+	fmt.Printf("Popped element: %d\n", stackll.Pop())
+
+	// Print the stack again
+	stackll.PrintStack()
 }

@@ -1,5 +1,9 @@
 package stackusinglinkedlist
 
+import (
+	"fmt"
+)
+
 // Node represents each element in the stack
 // It contains the data and a pointer to the next node
 type Node struct {
@@ -37,4 +41,53 @@ func (s *Stack) Push(value int) {
 
 	s.top = newNode
 	s.size++
+}
+
+// Pop removes and returns the top element from the stack
+// Returns -1 if the stack is empty
+// Time Complexity: O(1)
+func (s *Stack) Pop() int {
+	if s.IsEmpty() {
+		fmt.Println("stack is empty")
+		return -1
+	}
+
+	// store the value to return
+	value := s.top.Value
+
+	// move top to the next node
+	s.top = s.top.next
+	s.size--
+	return value
+}
+
+// Peek returns the top element without removing it
+// Returns -1 if the stack is empty
+// Time Complexity: O(1)
+func (s *Stack) Peek() int {
+	if s.IsEmpty() {
+		fmt.Println("stack is empty")
+		return -1
+	}
+
+	return s.top.Value
+}
+
+func (s *Stack) PrintStack() {
+	if s.IsEmpty() {
+		fmt.Println("stack is empty")
+		return
+	}
+
+	current := s.top
+	fmt.Println("stack (top to bottom) : ")
+	for current != nil {
+		fmt.Printf("%d", current.Value)
+		current = current.next
+	}
+	fmt.Println()
+}
+
+func (s *Stack) IsEmpty() bool {
+	return s.size == 0
 }
