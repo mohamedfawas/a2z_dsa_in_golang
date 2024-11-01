@@ -1,35 +1,42 @@
-package main
+package a2zdsaingolang
 
-// func reverseWords(s string) string {
-// 	if len(s) <= 1 {
-// 		return s
-// 	}
-
-// 	return reverseWords(s[1:]) + string(s[0])
-// }
-
-func productExceptSelf(nums []int) []int {
-	n := len(nums)
-	result := make([]int, n)
-	for i := range result {
-		result[i] = 1
-	}
-
-	prefixProduct := 1
-	for i := 0; i < n; i++ {
-		result[i] = prefixProduct
-		prefixProduct *= nums[i]
-	}
-
-	suffixProduct := 1
-	for i := n - 1; i >= 0; i-- {
-		result[i] *= suffixProduct
-		suffixProduct *= nums[i]
-	}
-
-	return result
+type MinStack struct {
+	Stack    []int
+	MinStack []int
 }
 
-func main() {
+func Constructor() MinStack {
+	return MinStack{
+		Stack:    make([]int, 0),
+		MinStack: make([]int, 0),
+	}
+}
 
+func (this *MinStack) Push(val int) {
+	// add the value to the main stack
+	this.Stack = append(this.Stack, val)
+
+	if len(this.MinStack) == 0 || val < this.MinStack[len(this.MinStack)-1] {
+		this.MinStack = append(this.MinStack, val)
+	}
+}
+
+func (this *MinStack) Pop() {
+	if len(this.Stack) == 0 {
+		return
+	}
+
+	if this.Stack[len(this.Stack)-1] == this.MinStack[len(this.MinStack)-1] {
+		this.MinStack = this.MinStack[:len(this.MinStack)-1]
+	}
+
+	this.Stack = this.Stack[:len(this.Stack)-1]
+}
+
+func (this *MinStack) Top() int {
+	return this.Stack[len(this.Stack)-1]
+}
+
+func (this *MinStack) GetMin() int {
+	return this.MinStack[len(this.MinStack)-1]
 }
