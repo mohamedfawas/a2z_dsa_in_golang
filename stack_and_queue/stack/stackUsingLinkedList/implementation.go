@@ -82,7 +82,7 @@ func (s *Stack) PrintStack() {
 	current := s.top
 	fmt.Println("stack (top to bottom) : ")
 	for current != nil {
-		fmt.Printf("%d", current.Value)
+		fmt.Printf("%d\n", current.Value)
 		current = current.next
 	}
 	fmt.Println()
