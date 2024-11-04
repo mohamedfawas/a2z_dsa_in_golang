@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	quicksort "sorting/quick_sort"
+	bubblesort "sorting/bubble_sorting"
 )
 
 func main() {
 	nums := []int{5, 6, 4, 7, 3, 44, 77, 23, 9}
 	// sort
-	quicksort.QuickSort(nums, 0, len(nums)-1)
+	bubblesort.BubbleSort(nums)
 	fmt.Printf("After  sorting : %v", nums)
 }
