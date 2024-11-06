@@ -1,9 +1,6 @@
-package main
+package minstackaltapproach
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
 type MinimumStack struct {
 	stack    []int
@@ -41,18 +38,4 @@ func (mstack *MinimumStack) Pop() (int, error) {
 
 func (mstack *MinimumStack) GetMin() int {
 	return mstack.minStack[len(mstack.minStack)-1]
-}
-
-func main() {
-	minstack := &MinimumStack{}
-	fmt.Println("Initial stack")
-	fmt.Println(minstack)
-	fmt.Println("After adding elements")
-	minstack.Push(10)
-	minstack.Push(2)
-	minstack.Push(3)
-	minstack.Push(4)
-	fmt.Println("main stack : ", minstack.stack)
-	fmt.Println("min stack : ", minstack.minStack)
-	fmt.Println("min value in the stack : ", minstack.GetMin())
 }
