@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package stackleetcode
 
 func ReverseStringUsingStack(input string) string {
 	stack := []rune{}
@@ -11,16 +9,10 @@ func ReverseStringUsingStack(input string) string {
 
 	reversed := ""
 	for len(stack) > 0 {
-		n := len(stack)
-		top := stack[n-1]
-		reversed += string(top)
-		stack = stack[:n-1]
+		n := len(stack) - 1
+		reversed += string(stack[n])
+		stack = stack[:n]
 	}
 
 	return reversed
-}
-
-func main() {
-	str := "hello"
-	fmt.Println(ReverseStringUsingStack(str))
 }
