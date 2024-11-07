@@ -1,9 +1,6 @@
-package main
+package usingsinglequeuesimpleapproach
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
 type Stack struct {
 	queue []int
@@ -50,17 +47,4 @@ func (s *Stack) IsEmpty() bool {
 
 func (s *Stack) Size() int {
 	return len(s.queue)
-}
-
-func main() {
-	st := NewStack()
-
-	st.Push(1)
-	st.Push(2)
-	st.Push(3)
-	st.Push(4)
-
-	if front, err := st.Pop(); err == nil {
-		fmt.Println("popped element : ", front)
-	}
 }
