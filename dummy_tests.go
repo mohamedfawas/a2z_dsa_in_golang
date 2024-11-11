@@ -1,66 +1,64 @@
 package main
 
-import (
-	"errors"
-	"fmt"
-)
+import "fmt"
 
-type Stack struct {
-	queue []int
+type Graph struct {
+	Vertices int
+	AdjList  map[int][]int
 }
 
-func NewStack() *Stack {
-	return &Stack{
-		queue: make([]int, 0),
+func CreateGraph(vertices int) *Graph {
+	return &Graph{
+
+		Vertices: vertices,
+		AdjList:  make(map[int][]int),
 	}
 }
 
-func (s *Stack) Push(val int) {
-	s.queue = append(s.queue, val)
+func (g *Graph) AddEdge(v1, v2 int) {
+	g.AdjList[v1] = append(g.AdjList[v1], v2)
+	g.AdjList[v2] = append(g.AdjList[v2], v1)
+}
 
-	for i := 0; i < len(s.queue)-1; i++ {
-		front := s.queue[0]
-		s.queue = s.queue[1:]
-		s.queue = append(s.queue, front)
+func (g *Graph) BFS(startVertex int) {
+	visited := make(map[int]bool)
+	queue := []int{}
+	visited[startVertex] = true
+	queue = append(queue, startVertex)
+	fmt.Printf("BFS starting from vertex %d: ", startVertex)
+
+	for len(queue) > 0 {
+		vertex := queue[0]
+		queue = queue[1:]
+		fmt.Printf("%d ", vertex)
+
+		for _, neighbour := range g.AdjList[vertex] {
+			if !visited[neighbour] {
+				visited[neighbour] = true
+				queue = append(queue, neighbour)
+			}
+		}
 	}
-}
 
-func (s *Stack) Pop() (int, error) {
-	if len(s.queue) == 0 {
-		return 0, errors.New("stack is empty")
-	}
-
-	front := s.queue[0]
-	s.queue = s.queue[1:]
-	return front, nil
-}
-
-func (s *Stack) Peek() (int, error) {
-	if len(s.queue) == 0 {
-		return 0, errors.New("stack is empty")
-	}
-
-	front := s.queue[0]
-	return front, nil
-}
-
-func (s *Stack) IsEmpty() bool {
-	return len(s.queue) == 0
-}
-
-func (s *Stack) Size() int {
-	return len(s.queue)
+	fmt.Println()
 }
 
 func main() {
-	st := NewStack()
+	// Create a graph with 6 vertices (0 to 5)
+	graph := CreateGraph(6)
 
-	st.Push(1)
-	st.Push(2)
-	st.Push(3)
-	st.Push(4)
+	// Add edges to create the following graph:
+	//    0 --- 1 --- 2
+	//    |     |     |
+	//    3 --- 4 --- 5
+	graph.AddEdge(0, 1)
+	graph.AddEdge(1, 2)
+	graph.AddEdge(0, 3)
+	graph.AddEdge(1, 4)
+	graph.AddEdge(2, 5)
+	graph.AddEdge(3, 4)
+	graph.AddEdge(4, 5)
 
-	if front, err := st.Pop(); err == nil {
-		fmt.Println("popped element : ", front)
-	}
+	// Perform BFS starting from vertex 0
+	graph.BFS(0)
 }
