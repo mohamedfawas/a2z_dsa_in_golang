@@ -49,24 +49,3 @@ func (g *Graph) dfsRecursive(vertex int, visited map[int]bool) {
 		}
 	}
 }
-
-func main() {
-	// Create a graph with 6 vertices (0 to 5)
-	graph := CreateGraph(6)
-
-	// Add edges to create the following graph:
-	//    0 --- 1 --- 2
-	//    |     |     |
-	//    3 --- 4 --- 5
-	graph.AddEdge(0, 1)
-	graph.AddEdge(1, 2)
-	graph.AddEdge(0, 3)
-	graph.AddEdge(1, 4)
-	graph.AddEdge(2, 5)
-	graph.AddEdge(3, 4)
-	graph.AddEdge(4, 5)
-
-	// Perform DFS using recursive approach
-	graph.DFS(0)
-
-}
