@@ -1,72 +1,43 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
-// Graph represents an undirected graph using adjacency list
+type Edge struct {
+	To     int
+	Weight int
+}
+
 type Graph struct {
-	vertices int           // Number of vertices in the graph
-	adjList  map[int][]int // Adjacency list to store graph edges
+	AdjList [][]Edge
 }
 
-// CreateGraph initializes a new graph with given number of vertices
-func CreateGraph(vertices int) *Graph {
-	return &Graph{
-		vertices: vertices,
-		adjList:  make(map[int][]int),
+func NewGraph(vertices int) *Graph {
+	g := &Graph{make([][]Edge, vertices)}
+	for i := range vertices {
+		g.AdjList[i] = make([]Edge, 0)
 	}
+
+	return g
 }
 
-// AddEdge adds an edge between vertex v1 and v2
-func (g *Graph) AddEdge(v1, v2 int) {
-	// Since this is an undirected graph, we add edges for both directions
-	g.adjList[v1] = append(g.adjList[v1], v2)
-	g.adjList[v2] = append(g.adjList[v2], v1)
+func (g *Graph) AddEdge(from, to, weight int) {
+	g.AdjList[from] = append(g.AdjList[from], Edge{To: to, Weight: weight})
 }
 
-// DFS performs Depth-First Search starting from the given vertex
-func (g *Graph) DFS(startVertex int) {
-	// Create a visited map to keep track of visited vertices
-	visited := make(map[int]bool)
-
-	// Call the recursive helper function to print DFS traversal
-	fmt.Printf("DFS starting from vertex %d: ", startVertex)
-	g.dfsRecursive(startVertex, visited)
-	fmt.Println()
-}
-
-// dfsRecursive is a helper function that implements DFS recursively
-func (g *Graph) dfsRecursive(vertex int, visited map[int]bool) {
-	// Mark the current vertex as visited and print it
-	visited[vertex] = true
-	fmt.Printf("%d ", vertex)
-
-	// Recur for all adjacent vertices that have not been visited
-	for _, neighbor := range g.adjList[vertex] {
-		if !visited[neighbor] {
-			g.dfsRecursive(neighbor, visited)
+func (g *Graph) PrintGraph() {
+	for i := range g.AdjList {
+		for _, edge := range g.AdjList[i] {
+			fmt.Printf("edge from : %d connected to : %d with weight : %d ", i, edge.To, edge.Weight)
+			fmt.Println()
 		}
 	}
 }
 
 func main() {
-	// Create a graph with 6 vertices (0 to 5)
-	graph := CreateGraph(6)
+	g := NewGraph(4)
+	g.AddEdge(0, 1, 5)
+	g.AddEdge(0, 2, 3)
+	g.AddEdge(0, 3, 1)
 
-	// Add edges to create the following graph:
-	//    0 --- 1 --- 2
-	//    |     |     |
-	//    3 --- 4 --- 5
-	graph.AddEdge(0, 1)
-	graph.AddEdge(1, 2)
-	graph.AddEdge(0, 3)
-	graph.AddEdge(1, 4)
-	graph.AddEdge(2, 5)
-	graph.AddEdge(3, 4)
-	graph.AddEdge(4, 5)
-
-	// Perform DFS using recursive approach
-	graph.DFS(0)
-
+	g.PrintGraph()
 }
