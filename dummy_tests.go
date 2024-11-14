@@ -2,107 +2,68 @@ package main
 
 import "fmt"
 
-// Graph represents an adjacency list graph
-// Using a map where key is the vertex and value is a slice of its neighbors
-type Graph struct {
-	vertices map[int][]int
+type Node struct {
+	Value int
+	Left  *Node
+	Right *Node
 }
 
-// NewGraph creates and initializes a new Graph
-func NewGraph() *Graph {
-	return &Graph{
-		vertices: make(map[int][]int),
+func NewNode(value int) *Node {
+	return &Node{
+		Value: value,
+		Left:  nil,
+		Right: nil,
 	}
 }
 
-// AddEdge adds an edge between vertex v1 and v2
-func (g *Graph) AddEdge(v1, v2 int) {
-	// Add v2 to v1's neighbor list
-	g.vertices[v1] = append(g.vertices[v1], v2)
-	// Add v1 to v2's neighbor list (for undirected graph)
-	g.vertices[v2] = append(g.vertices[v2], v1)
-}
-
-// DFS performs Depth First Search starting from vertex start
-func (g *Graph) DFS(start int) {
-	// Create a map to keep track of visited vertices
-	visited := make(map[int]bool)
-
-	// Define a helper function that will be called recursively
-	var dfsHelper func(vertex int)
-	dfsHelper = func(vertex int) {
-		// Mark current vertex as visited
-		visited[vertex] = true
-
-		// Print current vertex (or process it as needed)
-		fmt.Printf("%d ", vertex)
-
-		// Visit all neighbors of current vertex
-		for _, neighbor := range g.vertices[vertex] {
-			// If neighbor hasn't been visited, visit it
-			if !visited[neighbor] {
-				dfsHelper(neighbor)
-			}
-		}
+func InorderTraversal(root *Node) {
+	if root == nil {
+		return
 	}
 
-	// Start DFS from the start vertex
-	dfsHelper(start)
-	fmt.Println()
+	InorderTraversal(root.Left)
+
+	fmt.Printf(" %d ", root.Value)
+
+	InorderTraversal(root.Right)
 }
 
-// BFS performs Breadth First Search starting from vertex start
-func (g *Graph) BFS(start int) {
-	// Create a map to keep track of visited vertices
-	visited := make(map[int]bool)
-
-	// Create a queue for BFS
-	// In Go, we can use a slice as a queue
-	queue := []int{start}
-
-	// Mark the start vertex as visited
-	visited[start] = true
-
-	// Continue until queue is empty
-	for len(queue) > 0 {
-		// Remove the first element from queue (dequeue)
-		vertex := queue[0]
-		queue = queue[1:]
-
-		// Print current vertex (or process it as needed)
-		fmt.Printf("%d ", vertex)
-
-		// Visit all neighbors of current vertex
-		for _, neighbor := range g.vertices[vertex] {
-			// If neighbor hasn't been visited:
-			// 1. Mark it as visited
-			// 2. Add it to queue
-			if !visited[neighbor] {
-				visited[neighbor] = true
-				queue = append(queue, neighbor)
-			}
-		}
+func PreOrderTraversal(root *Node) {
+	if root == nil {
+		return
 	}
-	fmt.Println()
+
+	fmt.Printf("%d ", root.Value)
+	PreOrderTraversal(root.Left)
+	PreOrderTraversal(root.Right)
 }
 
-// Example usage
+func PostOrderTraversal(root *Node) {
+	if root == nil {
+		return
+	}
+	PostOrderTraversal(root.Left)
+	PostOrderTraversal(root.Right)
+	fmt.Printf("%d ", root.Value)
+}
+
 func main() {
-	// Create a new graph
-	graph := NewGraph()
+	root := NewNode(1)
+	root.Left = NewNode(2)
+	root.Right = NewNode(3)
+	root.Left.Left = NewNode(4)
+	root.Left.Right = NewNode(5)
 
-	// Add edges to create this graph:
-	//     1 --- 2
-	//     |     |
-	//     3 --- 4
-	graph.AddEdge(1, 2)
-	graph.AddEdge(1, 3)
-	graph.AddEdge(2, 4)
-	graph.AddEdge(3, 4)
+	// Now let's try all three ways of walking through our tree!
+	fmt.Println("Inorder traversal (Left -> Root -> Right):")
+	InorderTraversal(root) // Should print: 4 2 5 1 3
+	fmt.Println("\n")
 
-	fmt.Println("DFS starting from vertex 1:")
-	graph.DFS(1)
+	fmt.Println("Preorder traversal (Root -> Left -> Right):")
+	PreOrderTraversal(root) // Should print: 1 2 4 5 3
+	fmt.Println("\n")
 
-	fmt.Println("BFS starting from vertex 1:")
-	graph.BFS(1)
+	fmt.Println("Postorder traversal (Left -> Right -> Root):")
+	PostOrderTraversal(root) // Should print: 4 5 2 3 1
+	fmt.Println("\n")
 }
