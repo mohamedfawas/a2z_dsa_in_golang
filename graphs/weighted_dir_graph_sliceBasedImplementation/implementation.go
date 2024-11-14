@@ -3,6 +3,14 @@ package weightedgraph
 import "fmt"
 
 /*
+Use slice-based implementation approach when:
+
+You know the number of vertices beforehand
+Vertices are numbered 0 to n-1
+Memory access speed is critical
+*/
+
+/*
 - Start by explaining that you're using an adjacency list representation and why (better for sparse graphs)
 - Mention that this implementation is for a directed weighted graph (if you need undirected, you'd add edges in both directions)
 - Point out that the time complexity for adding an edge is O(1)
