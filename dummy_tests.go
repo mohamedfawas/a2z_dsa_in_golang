@@ -2,68 +2,106 @@ package main
 
 import "fmt"
 
-type Node struct {
-	Value int
-	Left  *Node
-	Right *Node
+type MinHeap struct {
+	elements []int
 }
 
-func NewNode(value int) *Node {
-	return &Node{
-		Value: value,
-		Left:  nil,
-		Right: nil,
+func NewMinHeap() *MinHeap {
+	return &MinHeap{
+		elements: make([]int, 0),
 	}
 }
 
-func InorderTraversal(root *Node) {
-	if root == nil {
-		return
-	}
+func (h *MinHeap) Insert(value int) {
+	h.elements = append(h.elements, value)
 
-	InorderTraversal(root.Left)
-
-	fmt.Printf(" %d ", root.Value)
-
-	InorderTraversal(root.Right)
+	// Bubble up
+	h.BubbleUp(len(h.elements) - 1)
 }
 
-func PreOrderTraversal(root *Node) {
-	if root == nil {
-		return
-	}
+func (h *MinHeap) BubbleUp(index int) {
+	for index > 0 {
+		parentIndex := (index - 1) / 2
 
-	fmt.Printf("%d ", root.Value)
-	PreOrderTraversal(root.Left)
-	PreOrderTraversal(root.Right)
+		if h.elements[parentIndex] <= h.elements[index] {
+			break
+		}
+
+		h.elements[parentIndex], h.elements[index] = h.elements[index], h.elements[parentIndex]
+		index = parentIndex
+	}
 }
 
-func PostOrderTraversal(root *Node) {
-	if root == nil {
-		return
+func (h *MinHeap) ExtractMin() (int, error) {
+	if len(h.elements) == 0 {
+		return 0, fmt.Errorf("heap is empty")
 	}
-	PostOrderTraversal(root.Left)
-	PostOrderTraversal(root.Right)
-	fmt.Printf("%d ", root.Value)
+
+	min := h.elements[0]
+
+	lastIndex := len(h.elements) - 1
+	h.elements[0] = h.elements[lastIndex]
+
+	h.elements = h.elements[:lastIndex]
+
+	if lastIndex > 0 {
+		h.SinkDown(0)
+	}
+
+	return min, nil
+
+}
+
+func (h *MinHeap) SinkDown(index int) {
+	size := len(h.elements)
+
+	for {
+		leftChild := 2*index + 1
+		rightChild := 2*index + 2
+		smallest := index
+
+		if leftChild < size && h.elements[leftChild] < h.elements[smallest] {
+			smallest = leftChild
+		}
+
+		if rightChild < size && h.elements[rightChild] < h.elements[smallest] {
+			smallest = rightChild
+		}
+
+		if smallest == index {
+			break
+		}
+
+		h.elements[index], h.elements[smallest] = h.elements[smallest], h.elements[index]
+		index = smallest
+	}
+}
+
+func (h *MinHeap) Peek() (int, error) {
+	if len(h.elements) == 0 {
+		return 0, fmt.Errorf("stack is empty")
+	}
+
+	return h.elements[0], nil
+}
+
+func (h *MinHeap) Size() int {
+	return len(h.elements)
 }
 
 func main() {
-	root := NewNode(1)
-	root.Left = NewNode(2)
-	root.Right = NewNode(3)
-	root.Left.Left = NewNode(4)
-	root.Left.Right = NewNode(5)
+	heap := NewMinHeap()
 
-	// Now let's try all three ways of walking through our tree!
-	fmt.Println("Inorder traversal (Left -> Root -> Right):")
-	InorderTraversal(root) // Should print: 4 2 5 1 3
-	fmt.Println("\n")
+	numbers := []int{110, 7, 2, 9, 667, 35, 7, 2, 9, 4, 71}
+	fmt.Println("Adding numbers : ", numbers)
+	for _, num := range numbers {
+		heap.Insert(num)
+	}
 
-	fmt.Println("Preorder traversal (Root -> Left -> Right):")
-	PreOrderTraversal(root) // Should print: 1 2 4 5 3
-	fmt.Println("\n")
-
-	fmt.Println("Postorder traversal (Left -> Right -> Root):")
-	PostOrderTraversal(root) // Should print: 4 5 2 3 1
-	fmt.Println("\n")
+	fmt.Println("Numbers are coming out : ")
+	for heap.Size() > 0 {
+		num, _ := heap.ExtractMin()
+		fmt.Print(num, " ")
+	}
+	fmt.Println()
 }
