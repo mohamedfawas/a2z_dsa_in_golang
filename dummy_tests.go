@@ -38,6 +38,41 @@ func (t *Trie) Insert(word string) {
 	current.isEndOfWord = true
 }
 
+func (t *Trie) findNode(prefix string) *TrieNode {
+	current := t.root
+
+	for _, char := range prefix {
+		if _, exists := current.children[char]; !exists {
+			return nil
+		}
+
+		current = current.children[char]
+	}
+
+	return current
+}
+
+func findAllWords(node *TrieNode, prefix string, words *[]string) {
+	if node.isEndOfWord {
+		*words = append(*words, prefix)
+	}
+
+	for char, childNode := range node.children {
+		findAllWords(childNode, prefix+string(char), words)
+	}
+}
+
+func (t *Trie) AutoComplete(prefix string) []string {
+	node := t.findNode(prefix)
+	if node == nil {
+		return []string{}
+	}
+
+	var words []string
+	findAllWords(node, prefix, &words)
+	return words
+}
+
 func (t *Trie) Search(word string) bool {
 	current := t.root
 
@@ -65,22 +100,29 @@ func (t *Trie) StartsWith(word string) bool {
 }
 
 func main() {
-	// Create a new empty Trie
+	// Create a new word tree
 	trie := NewTrie()
 
-	// Add some words
-	trie.Insert("hello")
-	trie.Insert("world")
-	trie.Insert("hi")
+	// Add some words to our tree
+	words := []string{
+		"cat",
+		"car",
+		"card",
+		"carpet",
+		"dog",
+		"deer",
+		"deal",
+	}
 
-	// Try searching for words
-	fmt.Println("Searching for 'hello':", trie.Search("hello")) // true
-	fmt.Println("Searching for 'world':", trie.Search("world")) // true
-	fmt.Println("Searching for 'hi':", trie.Search("hi"))       // true
-	fmt.Println("Searching for 'hey':", trie.Search("hey"))     // false
+	for _, word := range words {
+		trie.Insert(word)
+	}
 
-	// Try prefix searches
-	fmt.Println("Prefix 'he':", trie.StartsWith("he")) // true
-	fmt.Println("Prefix 'wo':", trie.StartsWith("wo")) // true
-	fmt.Println("Prefix 'ha':", trie.StartsWith("ha")) // false
+	// Try finding words that start with "ca"
+	fmt.Println("Words starting with 'ca':")
+	fmt.Println(trie.AutoComplete("ca")) // Will print: [cat car card carpet]
+
+	// Try finding words that start with "de"
+	fmt.Println("\nWords starting with 'de':")
+	fmt.Println(trie.AutoComplete("de")) // Will print: [deer deal]
 }
