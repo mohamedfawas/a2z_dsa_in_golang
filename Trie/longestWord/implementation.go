@@ -1,4 +1,4 @@
-package main
+package longestwordusingtrie
 
 import "fmt"
 
@@ -64,20 +64,26 @@ func (t *Trie) Prefix(word string) bool {
 	return true
 }
 
+// FindLongestWord finds the longest word in the trie
 func (t *Trie) FindLongestWord() string {
 	longestWord := ""
 
+	// Helper function to perform DFS
 	var dfs func(node *TrieNode, currentWord string)
 	dfs = func(node *TrieNode, currentWord string) {
+		// If this is a valid word and longer than our current longest word,
+		// update the longest word
 		if node.isEndOfWord && len(currentWord) > len(longestWord) {
 			longestWord = currentWord
 		}
 
+		// Explore all possible children
 		for char, childNode := range node.children {
 			dfs(childNode, currentWord+string(char))
 		}
 	}
 
+	// Start DFS from root with empty string
 	dfs(t.root, "")
 	return longestWord
 }
