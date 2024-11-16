@@ -2,106 +2,85 @@ package main
 
 import "fmt"
 
-type MinHeap struct {
-	elements []int
+type TrieNode struct {
+	isEndOfWord bool
+	children    map[rune]*TrieNode
 }
 
-func NewMinHeap() *MinHeap {
-	return &MinHeap{
-		elements: make([]int, 0),
+func NewTrieNode() *TrieNode {
+	return &TrieNode{
+		isEndOfWord: false,
+		children:    make(map[rune]*TrieNode),
 	}
 }
 
-func (h *MinHeap) Insert(value int) {
-	h.elements = append(h.elements, value)
-
-	// Bubble up
-	h.BubbleUp(len(h.elements) - 1)
+type Trie struct {
+	root *TrieNode
 }
 
-func (h *MinHeap) BubbleUp(index int) {
-	for index > 0 {
-		parentIndex := (index - 1) / 2
+func NewTrie() *Trie {
+	return &Trie{
+		root: NewTrieNode(),
+	}
+}
 
-		if h.elements[parentIndex] <= h.elements[index] {
-			break
+func (t *Trie) Insert(word string) {
+	current := t.root
+
+	for _, char := range word {
+		if _, exists := current.children[char]; !exists {
+			current.children[char] = NewTrieNode()
 		}
 
-		h.elements[parentIndex], h.elements[index] = h.elements[index], h.elements[parentIndex]
-		index = parentIndex
+		current = current.children[char]
 	}
+
+	current.isEndOfWord = true
 }
 
-func (h *MinHeap) ExtractMin() (int, error) {
-	if len(h.elements) == 0 {
-		return 0, fmt.Errorf("heap is empty")
-	}
+func (t *Trie) Search(word string) bool {
+	current := t.root
 
-	min := h.elements[0]
-
-	lastIndex := len(h.elements) - 1
-	h.elements[0] = h.elements[lastIndex]
-
-	h.elements = h.elements[:lastIndex]
-
-	if lastIndex > 0 {
-		h.SinkDown(0)
-	}
-
-	return min, nil
-
-}
-
-func (h *MinHeap) SinkDown(index int) {
-	size := len(h.elements)
-
-	for {
-		leftChild := 2*index + 1
-		rightChild := 2*index + 2
-		smallest := index
-
-		if leftChild < size && h.elements[leftChild] < h.elements[smallest] {
-			smallest = leftChild
+	for _, char := range word {
+		if _, exists := current.children[char]; !exists {
+			return false
 		}
-
-		if rightChild < size && h.elements[rightChild] < h.elements[smallest] {
-			smallest = rightChild
-		}
-
-		if smallest == index {
-			break
-		}
-
-		h.elements[index], h.elements[smallest] = h.elements[smallest], h.elements[index]
-		index = smallest
-	}
-}
-
-func (h *MinHeap) Peek() (int, error) {
-	if len(h.elements) == 0 {
-		return 0, fmt.Errorf("stack is empty")
+		current = current.children[char]
 	}
 
-	return h.elements[0], nil
+	return current.isEndOfWord
 }
 
-func (h *MinHeap) Size() int {
-	return len(h.elements)
+func (t *Trie) StartsWith(word string) bool {
+	current := t.root
+
+	for _, char := range word {
+		if _, exists := current.children[char]; !exists {
+			return false
+		}
+		current = current.children[char]
+	}
+
+	return true
 }
 
 func main() {
-	heap := NewMinHeap()
+	// Create a new empty Trie
+	trie := NewTrie()
 
-	numbers := []int{110, 7, 2, 9, 667, 35, 7, 2, 9, 4, 71}
-	fmt.Println("Adding numbers : ", numbers)
-	for _, num := range numbers {
-		heap.Insert(num)
-	}
+	// Add some words
+	trie.Insert("hello")
+	trie.Insert("world")
+	trie.Insert("hi")
 
-	fmt.Println("Numbers are coming out : ")
-	for heap.Size() > 0 {
-		num, _ := heap.ExtractMin()
-		fmt.Print(num, " ")
-	}
-	fmt.Println()
+	// Try searching for words
+	fmt.Println("Searching for 'hello':", trie.Search("hello")) // true
+	fmt.Println("Searching for 'world':", trie.Search("world")) // true
+	fmt.Println("Searching for 'hi':", trie.Search("hi"))       // true
+	fmt.Println("Searching for 'hey':", trie.Search("hey"))     // false
+
+	// Try prefix searches
+	fmt.Println("Prefix 'he':", trie.StartsWith("he")) // true
+	fmt.Println("Prefix 'wo':", trie.StartsWith("wo")) // true
+	fmt.Println("Prefix 'ha':", trie.StartsWith("ha")) // false
 }
