@@ -1,6 +1,9 @@
 package validatebst
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // First, we'll create a structure for our tree node
 // Think of it like a box that can hold a number and point to two other boxes
@@ -14,7 +17,7 @@ type TreeNode struct {
 // It's like having a helper that checks if numbers are in the correct order
 func isBST(root *TreeNode) bool {
 	// We'll use a helper function that also checks if numbers are within allowed range
-	return isBSTHelper(root, -999999999, 999999999)
+	return isBSTHelper(root, math.MinInt64, math.MaxInt64)
 }
 
 // This is our helper function that does the actual checking

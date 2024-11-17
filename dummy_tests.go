@@ -1,97 +1,70 @@
 package main
 
-import "fmt"
-
-// First, we'll create a structure for our tree node
-// Think of it like a box that can hold a number and point to two other boxes
-type TreeNode struct {
-	Value int       // The number inside our box
-	Left  *TreeNode // Points to the left box (should be smaller numbers)
-	Right *TreeNode // Points to the right box (should be bigger numbers)
+type MaxHeap struct {
+	elements []int
 }
 
-// This function will help us check if our tree follows BST rules
-// It's like having a helper that checks if numbers are in the correct order
-func isBST(root *TreeNode) bool {
-	// We'll use a helper function that also checks if numbers are within allowed range
-	return isBSTHelper(root, -999999999, 999999999)
+func NewMaxHeap() *MaxHeap {
+	return &MaxHeap{
+		elements: make([]int, 0),
+	}
 }
 
-// This is our helper function that does the actual checking
-// min: smallest allowed number for current node
-// max: biggest allowed number for current node
-func isBSTHelper(node *TreeNode, min, max int) bool {
-	// If we reach an empty box (nil node), it's okay!
-	// Empty boxes don't break any rules
-	if node == nil {
-		return true
-	}
-
-	// Rule 1: Check if current number is within allowed range
-	// It's like checking if a number in a sequence is in the right place
-	if node.Value <= min || node.Value >= max {
-		return false
-	}
-
-	// Rule 2: Check left side
-	// All numbers on left should be smaller than current number
-	// So we update the max limit to current number
-	if !isBSTHelper(node.Left, min, node.Value) {
-		return false
-	}
-
-	// Rule 3: Check right side
-	// All numbers on right should be bigger than current number
-	// So we update the min limit to current number
-	if !isBSTHelper(node.Right, node.Value, max) {
-		return false
-	}
-
-	// If we reach here, all rules are followed!
-	return true
+func (h *MaxHeap) Insert(val int) {
+	h.elements = append(h.elements, val)
+	h.BubbleUp(len(h.elements) - 1)
 }
 
-// Here's how to use our functions
-func main() {
-	// Let's create a valid BST first
-	//       5
-	//      / \
-	//     3   7
-	//    / \
-	//   2   4
-
-	validBST := &TreeNode{
-		Value: 5,
-		Left: &TreeNode{
-			Value: 3,
-			Left:  &TreeNode{Value: 2},
-			Right: &TreeNode{Value: 4},
-		},
-		Right: &TreeNode{
-			Value: 7,
-		},
+func (h *MaxHeap) Delete(val int) (int, bool) {
+	if len(h.elements) == 0 {
+		return 0, false
 	}
 
-	// Let's create an invalid BST
-	//       5
-	//      / \
-	//     3   7
-	//    / \
-	//   2   6  <- This 6 makes it invalid because it's bigger than 5
+	maxVal := h.elements[0]
 
-	invalidBST := &TreeNode{
-		Value: 5,
-		Left: &TreeNode{
-			Value: 3,
-			Left:  &TreeNode{Value: 2},
-			Right: &TreeNode{Value: 6}, // This breaks BST property
-		},
-		Right: &TreeNode{
-			Value: 7,
-		},
+	lastIndex := len(h.elements) - 1
+	h.elements[0] = h.elements[lastIndex]
+
+	h.elements = h.elements[:lastIndex]
+
+	if len(h.elements) > 0 {
+		h.BubbleDown(0)
 	}
 
-	// Check both trees
-	fmt.Println("Is valid BST correct?:", isBST(validBST))     // Should print: true
-	fmt.Println("Is invalid BST correct?:", isBST(invalidBST)) // Should print: false
+	return maxVal, true
+}
+
+func (h *MaxHeap) BubbleUp(index int) {
+	for index > 0 {
+		parentIndex := (index - 1) / 2
+
+		if h.elements[parentIndex] >= h.elements[index] {
+			break
+		}
+
+		h.elements[parentIndex], h.elements[index] = h.elements[index], h.elements[parentIndex]
+	}
+}
+
+func (h *MaxHeap) BubbleDown(index int) {
+	for {
+		largest := index
+		leftChildIndex := 2*index + 1
+		rightChildIndex := 2*index + 2
+
+		if leftChildIndex < len(h.elements) && h.elements[leftChildIndex] > h.elements[largest] {
+			largest = leftChildIndex
+		}
+
+		if rightChildIndex < len(h.elements) && h.elements[rightChildIndex] > h.elements[largest] {
+			largest = rightChildIndex
+		}
+
+		if largest == index {
+			break
+		}
+
+		h.elements[index], h.elements[largest] = h.elements[largest], h.elements[index]
+		index = largest
+	}
 }
